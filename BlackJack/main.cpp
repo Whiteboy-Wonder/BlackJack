@@ -8,8 +8,9 @@ void lowerInput(string&);
 void swap(string& a, string& b);
 void shuffle(vector<string>&);
 void playLearnGame(vector<string>&);
-void printPlayerCards(vector<string>&);
-void printHouseCards(vector<string>&);
+void printPlayerCards(const string&, const string&);
+void printHouseCards(const string&, const string&);
+int addValue(const vector<string>&);
 
 int main()
 {
@@ -122,36 +123,104 @@ void shuffle(vector<string>& deck)						// Shuffles cards
 	}
 }
 
+void printHouseCards(const string& card1, const string& card2)
+{
+	cout << string(39, ' ');
+	cout << "House Cards\n";
+	cout << string(35, ' ');
+	cout << "_____	_____\n";
+	cout << string(35, ' ');
+	cout << "|   |	|   |\n";
+	cout << string(35, ' ');
+	cout << "|" << card1 << "|	|???|\n";
+	cout << string(35, ' ');
+	cout << "|___|	|___|\n";
+	cout << endl;
+}
+
+void printPlayerCards(const string& card1, const string& card2)
+{
+	cout << string(39, ' ');
+	cout << "Your Cards\n";
+	cout << string(33, ' ');
+	cout << "_______	_______\n";
+	cout << string(33, ' ');
+	cout << "|     |	|     |\n";
+	cout << string(33, ' ');
+	cout << "|     |	|     |\n";
+	cout << string(33, ' ');
+	cout << "| " << card1 << " |	| " << card2 << " |\n";
+	cout << string(33, ' ');
+	cout << "|     |	|     |\n";
+	cout << string(33, ' ');
+	cout << "|_____|	|_____|\n";
+	cout << endl;
+}
+
+int addValue(const vector<string>& cards)
+{
+	int playerValue = 0;
+	for (int i = 0; i < cards.size(); ++i)
+	{
+		string card = cards[0];																		// Not correctly going through the first char of each element in the vector correctly
+		if (card[i] == 'K' || card[i] == 'Q' || card[i] == 'J' || card[i] == '1')
+		{
+			playerValue += 10;
+		}
+		else if (card[i] == 'A')
+		{
+			cout << "You have an Ace!! Type in \"11\" or \"1\" to add the value of the card!\n";
+
+			int aceValue = 0;
+			cin >> aceValue;
+
+			if (aceValue != 11 || aceValue != 1)
+			{
+				bool incorrectInput = true;
+				while (incorrectInput)
+				{
+					cout << "You can only choose \"11\" or \"1\"\n";
+					cin >> aceValue;
+
+					if (aceValue == 11 || aceValue == 1)
+					{
+						incorrectInput = false;
+					}
+				}
+			}
+			playerValue += aceValue;
+		}
+		else
+		{
+			int charToInt = static_cast<int>(card[0]);
+			playerValue = playerValue + charToInt;
+		}
+	}
+	return playerValue;
+
+}
+
 void playLearnGame(vector<string>& deck)				// Plays learn game
 {
-	shuffle(deck);
+	bool gameOver = false;
+	while (!gameOver)
+	{
+		shuffle(deck);
 
-	cout << "Let's play a practice round!\n";
-	cout << "----------------------------\n";
+		cout << string(30, ' ');
+		cout << "Let's play a practice round!\n";
+		cout << string(30, ' ');
+		cout << "----------------------------\n";
 
-	vector<string> player;
-	vector<string> house;
+		vector<string> player = { deck[0], deck[2] };
+		vector<string> house = { deck[1] , deck[3] };
+		deck.erase(deck.begin(), deck.begin() + 4);
 
-	player[0] = deck[0];
-	house[0] = deck[1];
-	player[1] = deck[2];
-	house[1] = deck[3];
-	deck.erase(deck.begin(), deck.begin() + 3);
+		printHouseCards(house[0], house[1]);
+		printPlayerCards(player[0], player[1]);
+		cout << string(35, ' ');
+		cout << "----------------------------------" << endl;
 
-	cout << "|------|\n";
-	cout << "|      |\n";
-	cout << "|" << player[0] << "|\n";
-	cout << "|      |\n";
-	cout << "|------|\n";
-
-}
-
-void printPlayerCards(vector<string>& deck)
-{
-	
-}
-
-void printHouseCards(vector<string>& deck)
-{
-
+		cout << "Your value of cards equal to: " << addValue(player);
+	}
 }
