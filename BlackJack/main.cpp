@@ -254,7 +254,7 @@ void printabove21(const vector<string>& deck, const vector<string>& playerCards,
 	cout << "You have a " << (1 / countOfSuccessCards) << "% chance of pulling a card that will get you above 21.\n";
 }
 
-void playLearnGame(vector<string>& deck)				// Plays learning game
+void playLearnGame(vector<string>& deck)				// Plays learn game
 {
 	bool gameOver = false;
 	while (!gameOver)
